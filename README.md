@@ -1,1 +1,1 @@
-Projeto da disciplina S205(Interface Home Máquina).
+Projetos da disciplina S205(Interface Home Máquina).
