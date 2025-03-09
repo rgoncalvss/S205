@@ -1,41 +1,75 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>App Inatel</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>App Inatel</title>
     <link rel="stylesheet" type="text/css" href="main.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
+      rel="stylesheet"
+    />
+    <script src="./main.js" defer></script>
   </head>
   <body>
     <header>
       <div class="container">
-        <img src="./assets/Logo-Inatel.png" alt="Inatel Logo" />
+        <img src="./assets/inatel.svg" alt="Inatel Logo" class="logo" />
+        <button id="menu-toggle">
+          <span class="material-icons-outlined">palette</span> Temas
+        </button>
       </div>
     </header>
-    <div class="content" style="background-color: blueviolet">
-      <h1 style="color: black">Olá Aluno</h1>
-      <p>Você não possui armários reservados</p>
-      <p>Você possui uma pendência no financeiro</p>
+
+    <div id="theme-menu" class="menu">
+      <button onclick="changeTheme('inatel')">
+        <span class="material-icons-outlined">school</span> Tema Inatel
+      </button>
+      <button onclick="changeTheme('moderno')">
+        <span class="material-icons-outlined">eco</span> Tema Verde
+      </button>
     </div>
-    <div class="content" style="background-color: green">
-      <h1>Aulas</h1>
+
+    <div class="content">
+      <h1><span class="material-icons-outlined">person</span> Olá Aluno</h1>
+      <p>
+        <span class="material-icons-outlined">lock</span>
+        Você não possui armários reservados
+      </p>
+      <p>
+        <span class="material-icons-outlined">warning</span> Você possui uma
+        pendência no financeiro
+      </p>
+    </div>
+
+    <div class="content">
+      <h1><span class="material-icons-outlined">schedule</span> Aulas</h1>
       <div class="disciplina">
-        <p>Disciplina 1</p>
-        <p>Sala e Horário</p>
+        <p><span class="material-icons-outlined">book</span> Disciplina 1</p>
+        <p><span class="material-icons-outlined">room</span> Sala e Horário</p>
       </div>
       <div class="disciplina">
-        <p>Disciplina 2</p>
-        <p>Sala e Horário</p>
+        <p><span class="material-icons-outlined">book</span> Disciplina 2</p>
+        <p><span class="material-icons-outlined">room</span> Sala e Horário</p>
       </div>
       <div class="disciplina">
-        <p>Disciplina 3</p>
-        <p>Sala e Horário</p>
+        <p><span class="material-icons-outlined">book</span> Disciplina 3</p>
+        <p><span class="material-icons-outlined">room</span> Sala e Horário</p>
       </div>
     </div>
-    <div class="content" style="background-color: red">
-      <h1>Notícias</h1>
-      <img src="./assets/noticia1.jpeg" alt="Notícia 1" />
+
+    <div class="content">
+      <h1><span class="material-icons-outlined">newspaper</span> Notícias</h1>
+      <div class="noticia">
+        <img src="./assets/noticia1.jpeg" alt="Notícia 1" />
+      </div>
     </div>
   </body>
 </html>
