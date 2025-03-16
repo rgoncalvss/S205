@@ -1,3 +1,4 @@
+/* Variáveis globais de cores */
 :root {
   --azul-inatel: #003c71;
   --cinza-claro: #d1d3d4;
@@ -31,6 +32,182 @@ html {
   background-color: var(--cor-background);
 }
 
+/* Correção do carrossel - limitando largura e centralizando */
+.carousel-container {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--cor-primaria);
+  border-radius: 10px;
+  margin: 20px auto; /* Centraliza horizontalmente */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  width: calc(100% - 40px); /* Limita a largura com margens */
+  max-width: 1200px; /* Limita tamanho máximo */
+  display: flex;
+  justify-content: center;
+}
+
+.carousel {
+  display: flex;
+  width: 100%;
+  overflow: hidden; /* Previne que o conteúdo vaze */
+  position: relative;
+}
+
+/* Correção dos cards - tanto para .card quanto para .event-card */
+.card,
+.event-card {
+  min-width: 100%;
+  max-width: 100%; /* Limita largura máxima */
+  flex: 0 0 100%; /* Impede que cresça além do tamanho especificado */
+  text-align: center;
+  box-sizing: border-box; /* Inclui padding e border na largura */
+  display: none; /* Esconde todos os cards */
+}
+
+.card.active,
+.event-card.active {
+  display: block; /* Mostra apenas o card ativo */
+}
+
+.card img,
+.event-card img {
+  width: 100%;
+  height: auto;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  object-fit: cover; /* Garante que a imagem cubra o espaço sem distorcer */
+  max-height: 500px; /* Limita altura máxima */
+}
+
+/* Correção da seção de informações */
+.info {
+  padding: 15px;
+  text-align: left;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: var(--cor-texto);
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Correção para títulos e parágrafos dentro de .info */
+.info h3 {
+  font-size: 16px;
+  color: var(--cor-texto);
+  font-weight: bold;
+  margin-top: 0;
+  margin-bottom: 5px;
+  width: 100%;
+  display: block;
+}
+
+.info p {
+  font-size: 14px;
+  color: var(--cor-texto);
+  line-height: 1.5;
+  margin: 0 0 10px 0;
+  width: 100%;
+  display: block;
+}
+
+.info p:last-child {
+  margin-bottom: 0;
+}
+
+/* Estilo para ícones dentro da seção de informações */
+.icon {
+  font-size: 15px;
+  margin-left: 5px;
+  margin-right: 5px;
+  width: 18px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* Corrigindo o espaçamento entre ícones */
+.material-symbols-outlined.icon + .material-symbols-outlined.icon {
+  margin-left: 15px;
+}
+
+/* Botões de navegação */
+button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 12px;
+  z-index: 10;
+}
+
+#prevBtn {
+  left: 10px;
+  position: absolute;
+}
+
+#nextBtn {
+  right: 10px;
+  position: absolute;
+}
+
+/* Restaurando o botão de tema */
+#menu-toggle {
+  position: static;
+  transform: none;
+  background-color: transparent;
+  color: var(--cor-texto);
+  border: 1px solid var(--cor-texto);
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+#theme-menu button {
+  position: static;
+  transform: none;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+  padding: 8px 16px;
+  background-color: var(--cor-primaria);
+  color: white;
+  border: none;
+  cursor: pointer;
+  margin: 5px 0;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+/* Estilos de textos e botões */
+h3 {
+  font-size: 16px;
+  color: var(--cor-texto);
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+p {
+  font-size: 14px;
+  color: var(--cor-texto);
+  line-height: 1.5;
+}
+
+.material-symbols-outlined {
+  font-size: 18px;
+  vertical-align: middle;
+}
+
+/* Estilos do menu */
 header {
   background-color: var(--cor-primaria);
   padding: 10px 0;
@@ -54,18 +231,6 @@ header {
   height: 50px;
 }
 
-#menu-toggle {
-  background-color: transparent;
-  color: var(--cor-texto);
-  border: 1px solid var(--cor-texto);
-  padding: 8px 16px;
-  border-radius: 4px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
 #menu-toggle:hover {
   background-color: rgba(255, 255, 255, 0.1);
 }
@@ -83,36 +248,24 @@ header {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-#theme-menu button {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  width: 100%;
-  padding: 8px 16px;
-  background-color: var(--cor-primaria);
-  color: white;
-  border: none;
-  cursor: pointer;
-  margin: 5px 0;
-  border-radius: 5px;
-  transition: background-color 0.3s;
-}
-
 #theme-menu button:hover {
   background-color: var(--cor-secundaria);
 }
 
+/* Estilos para seções de conteúdo */
 .content {
   width: auto;
+  max-width: 1200px; /* Limita largura máxima */
+  margin: 10px auto; /* Centraliza horizontalmente */
   padding: 20px;
-  margin: 10px;
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   background-color: var(--cor-secao3);
 }
 
 .content h1,
-.content h2 {
+.content h2,
+.content h3 {
   margin-top: 0;
   font-size: 1.8rem;
   font-weight: bold;
@@ -147,6 +300,7 @@ header {
   border-radius: 8px;
 }
 
+/* Estilos para a área de conteúdo, usando as cores de fundo */
 .content:nth-of-type(1) {
   background-color: var(--cor-secao1);
 }
@@ -160,12 +314,49 @@ header {
   color: var(--cor-texto);
 }
 
+/* Correção da seção de notícias */
 .noticia {
   background-color: var(--cor-secao3);
   border-radius: 8px;
   padding: 15px;
   margin-top: 10px;
+  margin-bottom: 15px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden; /* Previne que o conteúdo vaze */
+  display: flex;
+  flex-direction: column;
+}
+
+.noticia img {
+  width: 100%;
+  height: auto;
+  max-height: 350px;
+  object-fit: cover;
+  border-radius: 8px 8px 0 0;
+}
+
+.noticia h3 {
+  margin-top: 10px;
+  font-size: 16px;
+  color: var(--cor-texto);
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.noticia p {
+  margin: 0 0 10px 0;
+  font-size: 14px;
+  color: var(--cor-texto);
+  display: block;
+  width: 100%;
+}
+
+.noticia p:last-child {
+  margin-bottom: 0;
 }
 
 .disciplina {
@@ -198,7 +389,45 @@ header {
   color: var(--cor-icones);
 }
 
+/* Navegação do carrossel de notícias */
+.carousel-nav {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.carousel-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--cinza-claro);
+  margin: 0 5px;
+  cursor: pointer;
+}
+
+.carousel-dot.active {
+  background-color: var(--cor-secundaria);
+}
+
 @media (max-width: 768px) {
+  .noticia {
+    padding: 10px;
+    margin-top: 8px;
+    margin-bottom: 12px;
+  }
+
+  .noticia h3 {
+    font-size: 14px;
+  }
+
+  .noticia p {
+    font-size: 12px;
+  }
+
+  .noticia img {
+    max-height: 250px;
+  }
+
   .content h1 {
     font-size: 1.5rem;
   }
@@ -221,5 +450,49 @@ header {
 
   .material-icons-outlined {
     font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .noticia {
+    padding: 8px;
+    margin-top: 6px;
+    margin-bottom: 10px;
+  }
+
+  .noticia h3 {
+    font-size: 12px;
+  }
+
+  .noticia p {
+    font-size: 10px;
+  }
+
+  .noticia img {
+    max-height: 200px;
+  }
+
+  .content h1 {
+    font-size: 1.2rem;
+  }
+
+  .content h2 {
+    font-size: 1rem;
+  }
+
+  .content p {
+    font-size: 0.8rem;
+  }
+
+  .disciplina p {
+    font-size: 0.8rem;
+  }
+
+  header .logo {
+    width: 100px;
+  }
+
+  .material-icons-outlined {
+    font-size: 1rem;
   }
 }
