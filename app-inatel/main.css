@@ -409,6 +409,65 @@ header {
   background-color: var(--cor-secundaria);
 }
 
+:root {
+  --frequencia: #126ae2;
+  --nota: #126ae2;
+  --prova: #126ae2;
+}
+
+.cr-low {
+  color: #ff4444;
+}
+.cr-medium {
+  color: #ffa500;
+}
+.cr-high {
+  color: #4caf50;
+}
+
+.metricas {
+  display: flex;
+  gap: 2rem;
+  margin-top: 1rem;
+}
+
+.comp-aula {
+  background: rgba(255, 255, 255, 0.1);
+  border-left: 4px solid var(--cor-secundaria);
+  border-radius: 4px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  color: var(--cor-texto);
+}
+
+.prova-alert {
+  color: var(--cor-secundaria);
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.titulo-aula {
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.detalhes-aula {
+  font-size: 0.9rem;
+  margin-bottom: 0.25rem;
+}
+
+.detalhes-aula b {
+  font-weight: 600;
+}
+
+.metricas {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 0.75rem;
+}
+
 @media (max-width: 768px) {
   .noticia {
     padding: 10px;
