@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>App Inatel - Boletos</title>
+    <style>
+      :root {
+        --bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        --primary: #004b8d;
+        --accent: #0074d9;
+        --text: #111827;
+        --radius: 20px;
+        --hover: #e0f0ff;
+        --shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        --shadow-hover: 0 15px 35px rgba(0, 0, 0, 0.25);
+        --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        --gradient-accent: linear-gradient(135deg, #0074d9 0%, #00a8ff 100%);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", sans-serif;
+      }
+
+      body {
+        background: var(--bg);
+        color: var(--text);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 2rem;
+        min-height: 100vh;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      .app {
+        width: 100%;
+        max-width: 480px;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
+      }
+
+      .screen {
+        display: none;
+        padding: 2rem;
+        flex-direction: column;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.4s ease;
+      }
+
+      .active {
+        display: flex;
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .logo {
+        width: 100%;
+        height: 120px;
+        background: var(--gradient-primary);
+        border-radius: var(--radius);
+        margin-bottom: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.8rem;
+        font-weight: 700;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .logo::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: left 0.5s;
+      }
+
+      .logo:hover::before {
+        left: 100%;
+      }
+
+      h2 {
+        margin-bottom: 1.5rem;
+        color: var(--primary);
+        font-weight: 700;
+        font-size: 1.8rem;
+        text-align: center;
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      input {
+        padding: 1rem;
+        margin-bottom: 1.25rem;
+        border-radius: var(--radius);
+        border: 2px solid #e5e7eb;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: rgba(255, 255, 255, 0.9);
+      }
+
+      input:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(0, 116, 217, 0.1);
+        transform: translateY(-2px);
+      }
+
+      input[type="number"] {
+        appearance: textfield;
+      }
+
+      input[type="number"]::-webkit-outer-spin-button,
+      input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+
+      button {
+        padding: 1rem 1.5rem;
+        background: var(--gradient-accent);
+        color: white;
+        border: none;
+        border-radius: var(--radius);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 1rem;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(0, 116, 217, 0.3);
+        position: relative;
+        overflow: hidden;
+      }
+
+      button:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-hover);
+      }
+
+      button:active {
+        transform: translateY(0);
+      }
+
+      .menu-option {
+        border: 2px solid transparent;
+        border-radius: var(--radius);
+        padding: 1.8rem 1.5rem;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        font-weight: 600;
+        font-size: 1.1rem;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      }
+
+      .menu-option::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: var(--gradient-accent);
+        transition: left 0.4s ease;
+        z-index: -1;
+      }
+
+      .menu-option:hover {
+        background: var(--gradient-accent);
+        color: white;
+        transform: translateY(-5px) scale(1.02);
+        border-color: var(--accent);
+        box-shadow: var(--shadow-hover);
+      }
+
+      .menu-option:hover::before {
+        left: 0;
+      }
+
+      .profile-pic {
+        width: 90px;
+        height: 90px;
+        background: #ccc;
+        border-radius: 50%;
+        margin: 0 auto 1rem;
+      }
+
+      .tabs {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 1.25rem;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .tabs button {
+        flex: 1;
+        background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
+        color: #374151;
+        border-radius: 15px;
+        padding: 0.75rem 1rem;
+        text-align: center;
+        transition: all 0.3s ease;
+        font-weight: 500;
+        border: none;
+        cursor: pointer;
+        font-size: 0.875rem;
+      }
+
+      .tabs button:hover {
+        background: var(--gradient-accent);
+        color: white;
+        transform: translateY(-2px);
+      }
+
+      .tabs button.active-tab {
+        background: var(--gradient-accent);
+        color: white;
+        box-shadow: 0 4px 15px rgba(0, 116, 217, 0.3);
+      }
+
+      .boleto-card {
+        border: 2px solid rgba(229, 231, 235, 0.6);
+        border-radius: var(--radius);
+        padding: 1.8rem;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      }
+
+      .boleto-card:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-hover);
+        border-color: var(--accent);
+      }
+
+      .boleto-card p {
+        margin-bottom: 0.75rem;
+        font-weight: 500;
+      }
+
+      .boleto-card button {
+        margin-top: 1rem;
+        width: 100%;
+      }
+
+      #comprovanteDetalhes {
+        padding: 2rem;
+        background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+        border-radius: var(--radius);
+        margin-top: 1.5rem;
+        border: 2px solid rgba(0, 116, 217, 0.2);
+        box-shadow: 0 4px 15px rgba(0, 116, 217, 0.1);
+      }
+
+      #comprovanteDetalhes p {
+        margin-bottom: 1rem;
+        line-height: 1.6;
+        font-weight: 500;
+      }
+
+      .payment-details {
+        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+        border-radius: var(--radius);
+        padding: 2rem;
+        margin: 1rem 0;
+        border: 2px solid rgba(0, 116, 217, 0.1);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      }
+
+      .payment-methods {
+        margin-top: 1.5rem;
+      }
+
+      .payment-method {
+        display: flex;
+        align-items: center;
+        padding: 1rem 1.5rem;
+        margin-bottom: 1rem;
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        border: 2px solid transparent;
+        border-radius: 15px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 500;
+      }
+
+      .payment-method:hover {
+        background: var(--gradient-accent);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 116, 217, 0.3);
+      }
+
+      .payment-method input[type="radio"] {
+        margin-right: 1rem;
+        transform: scale(1.2);
+        accent-color: var(--accent);
+      }
+
+      .payment-method:has(input:checked) {
+        background: var(--gradient-accent);
+        color: white;
+        border-color: var(--accent);
+        box-shadow: 0 8px 25px rgba(0, 116, 217, 0.3);
+      }
+
+      .pix-code,
+      .cartao-info {
+        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+        border: 2px dashed var(--accent);
+        padding: 1.5rem;
+        margin-top: 1.5rem;
+        border-radius: var(--radius);
+        font-family: "Courier New", monospace;
+        box-shadow: 0 4px 15px rgba(0, 116, 217, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      .pix-code:hover,
+      .cartao-info:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 116, 217, 0.2);
+      }
+
+      /* Animações e loading states */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes pulse {
+        0% {
+          box-shadow: 0 0 0 0 rgba(0, 116, 217, 0.7);
+        }
+        70% {
+          box-shadow: 0 0 0 10px rgba(0, 116, 217, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(0, 116, 217, 0);
+        }
+      }
+
+      .fade-in {
+        animation: fadeInUp 0.6s ease-out;
+      }
+
+      .loading {
+        position: relative;
+      }
+
+      .loading::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 20px;
+        height: 20px;
+        margin: -10px 0 0 -10px;
+        border: 2px solid #f3f3f3;
+        border-top: 2px solid var(--accent);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Responsividade melhorada */
+      @media (max-width: 480px) {
+        body {
+          padding: 1rem;
+        }
+
+        .app {
+          max-width: 100%;
+          margin: 0;
+        }
+
+        .screen {
+          padding: 1.5rem;
+        }
+
+        .logo {
+          height: 100px;
+          font-size: 1.5rem;
+        }
+
+        .menu-option {
+          padding: 1.5rem 1rem;
+          font-size: 1rem;
+        }
+
+        h2 {
+          font-size: 1.5rem;
+        }
+      }
+
+      /* Estados de sucesso e erro */
+      .success-message {
+        background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+        border: 2px solid #34d399;
+        color: #065f46;
+        padding: 1rem;
+        border-radius: 15px;
+        text-align: center;
+        font-weight: 600;
+        margin: 1rem 0;
+        animation: pulse 2s infinite;
+      }
+
+      .error-message {
+        background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+        border: 2px solid #f87171;
+        color: #7f1d1d;
+        padding: 1rem;
+        border-radius: 15px;
+        text-align: center;
+        font-weight: 600;
+        margin: 1rem 0;
+      }
+
+      /* Melhorias nos cards de boleto */
+      .boleto-status {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .status-ativo {
+        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        color: #92400e;
+        border: 1px solid #f59e0b;
+      }
+
+      .status-vencido {
+        background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+        color: #7f1d1d;
+        border: 1px solid #ef4444;
+      }
+
+      .status-pago {
+        background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+        color: #065f46;
+        border: 1px solid #10b981;
+      }
+
+      /* Melhorias adicionais para um design mais profissional */
+      .professional-card {
+        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+        border: 1px solid #e2e8f0;
+        border-radius: var(--radius);
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+      }
+
+      .professional-card:hover {
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        transform: translateY(-2px);
+      }
+
+      .text-muted {
+        color: #64748b;
+        font-size: 0.875rem;
+      }
+
+      .text-primary {
+        color: var(--primary);
+        font-weight: 600;
+      }
+
+      .text-success {
+        color: #059669;
+        font-weight: 600;
+      }
+
+      .text-warning {
+        color: #d97706;
+        font-weight: 600;
+      }
+
+      .text-danger {
+        color: #dc2626;
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <!-- Tela Login -->
+      <div class="screen active" id="loginScreen">
+        <div class="logo">App Inatel</div>
+        <h2>Login</h2>
+        <input type="text" id="matricula" placeholder="Matrícula" />
+        <input type="password" id="senha" placeholder="Senha" />
+        <button onclick="login()">Entrar</button>
+      </div>
+
+      <!-- Tela Inicial -->
+      <div class="screen" id="homeScreen">
+        <div
+          class="profile-pic"
+          style="
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+          "
+        >
+          RS
+        </div>
+        <h2 id="nomeUsuario">Bem-vindo!</h2>
+        <p
+          style="
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #6b7280;
+            font-weight: 500;
+          "
+        >
+          <span id="matriculaUsuario">Matrícula: ------</span> •
+          <span id="cursoUsuario">Engenharia de Computação</span>
+        </p>
+        <div class="menu-option" onclick="goTo('boletosScreen')">
+          Meus Boletos
+        </div>
+        <div class="menu-option" onclick="showComingSoon()">
+          Minhas Disciplinas
+        </div>
+        <div class="menu-option" onclick="showComingSoon()">
+          Calendário Acadêmico
+        </div>
+        <div class="menu-option" onclick="showComingSoon()">Comunicados</div>
+        <button
+          onclick="logout()"
+          style="
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            margin-top: 1rem;
+          "
+        >
+          Sair
+        </button>
+      </div>
+
+      <!-- Tela Boletos -->
+      <div class="screen" id="boletosScreen">
+        <h2>Meus Boletos</h2>
+        <div
+          style="
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            border: 2px solid rgba(0, 116, 217, 0.2);
+          "
+        >
+          <p
+            style="
+              margin: 0;
+              font-weight: 600;
+              color: var(--primary);
+              text-align: center;
+            "
+          >
+            Resumo Financeiro
+          </p>
+          <div
+            id="resumoFinanceiro"
+            style="
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+              gap: 1rem;
+              margin-top: 1rem;
+              text-align: center;
+            "
+          ></div>
+        </div>
+        <div class="tabs">
+          <button
+            id="tab-ativos"
+            class="active-tab"
+            onclick="filterBoletos('ativos')"
+          >
+            À Vencer
+          </button>
+          <button id="tab-vencidos" onclick="filterBoletos('vencidos')">
+            Vencidos
+          </button>
+          <button id="tab-pagos" onclick="filterBoletos('pagos')">Pagos</button>
+        </div>
+        <div id="boletosContainer"></div>
+        <button
+          onclick="goTo('homeScreen')"
+          style="background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%)"
+        >
+          Voltar
+        </button>
+      </div>
+
+      <!-- Tela Pagamento -->
+      <div class="screen" id="pagamentoScreen">
+        <h2>Pagamento do Boleto</h2>
+        <div id="detalhesPagamento"></div>
+        <div style="display: flex; gap: 1rem; margin-top: 1.5rem">
+          <button
+            onclick="goTo('boletosScreen')"
+            style="
+              flex: 1;
+              background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+            "
+          >
+            Voltar
+          </button>
+          <button onclick="confirmarPagamento()" style="flex: 2">
+            Confirmar Pagamento
+          </button>
+        </div>
+      </div>
+
+      <!-- Tela Comprovante -->
+      <div class="screen" id="comprovanteScreen">
+        <h2>Comprovante</h2>
+        <div id="comprovanteDetalhes"></div>
+        <div style="display: flex; gap: 1rem; margin-top: 1.5rem">
+          <button
+            onclick="goTo('boletosScreen')"
+            style="flex: 1; background: var(--gradient-accent)"
+          >
+            Ver Boletos
+          </button>
+          <button
+            onclick="goTo('homeScreen')"
+            style="
+              flex: 1;
+              background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+            "
+          >
+            Início
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const screens = document.querySelectorAll(".screen");
+
+      function goTo(id) {
+        const currentScreen = document.querySelector(".screen.active");
+        if (currentScreen) {
+          currentScreen.style.opacity = "0";
+          currentScreen.style.transform = "translateY(-20px)";
+
+          setTimeout(() => {
+            screens.forEach((s) => s.classList.remove("active"));
+            const newScreen = document.getElementById(id);
+            newScreen.classList.add("active");
+
+            setTimeout(() => {
+              newScreen.style.opacity = "1";
+              newScreen.style.transform = "translateY(0)";
+            }, 50);
+          }, 200);
+        } else {
+          screens.forEach((s) => s.classList.remove("active"));
+          document.getElementById(id).classList.add("active");
+        }
+      }
+
+      function login() {
+        const matricula = document.getElementById("matricula").value;
+        const senha = document.getElementById("senha").value;
+
+        if (!matricula || !senha) {
+          showMessage("Por favor, preencha todos os campos!", "error");
+          return;
+        }
+
+        const loginBtn = document.querySelector("#loginScreen button");
+        loginBtn.classList.add("loading");
+        loginBtn.disabled = true;
+        loginBtn.textContent = "Entrando...";
+
+        // Simula o tempo de carregamento
+        setTimeout(() => {
+          loginBtn.classList.remove("loading");
+          loginBtn.disabled = false;
+          loginBtn.textContent = "Entrar";
+
+          // Armazena a matrícula do usuário
+          localStorage.setItem("userMatricula", matricula);
+
+          // Atualiza as informações do usuário na tela inicial
+          atualizarInfoUsuario(matricula);
+
+          showMessage("Login realizado com sucesso!", "success");
+
+          setTimeout(() => {
+            goTo("homeScreen");
+          }, 1000);
+        }, 1500);
+      }
+
+      function showMessage(text, type) {
+        const existingMessage = document.querySelector(
+          ".success-message, .error-message"
+        );
+        if (existingMessage) {
+          existingMessage.remove();
+        }
+
+        const messageDiv = document.createElement("div");
+        messageDiv.className = `${type}-message`;
+        messageDiv.textContent = text;
+
+        const loginScreen = document.getElementById("loginScreen");
+        const button = loginScreen.querySelector("button");
+        loginScreen.insertBefore(messageDiv, button);
+
+        setTimeout(() => {
+          messageDiv.remove();
+        }, 300);
+      }
+
+      let boletos = [
+        { id: 1, valor: 500, vencimento: "2025-10-10", pago: false },
+        { id: 2, valor: 450, vencimento: "2025-04-01", pago: false },
+        {
+          id: 3,
+          valor: 550,
+          vencimento: "2025-02-01",
+          pago: true,
+          pagoEm: "2025-01-30",
+        },
+      ];
+
+      function resetTabStyles() {
+        document
+          .querySelectorAll(".tabs button")
+          .forEach((btn) => btn.classList.remove("active-tab"));
+      }
+
+      function filterBoletos(tipo) {
+        resetTabStyles();
+        document.getElementById(`tab-${tipo}`).classList.add("active-tab");
+        const container = document.getElementById("boletosContainer");
+        container.innerHTML = "";
+
+        // Atualiza o resumo financeiro
+        atualizarResumoFinanceiro();
+
+        const hoje = new Date();
+        boletos.forEach((b) => {
+          let venc = new Date(b.vencimento);
+          let mostrar = false;
+          let statusClass = "";
+          let statusText = "";
+
+          if (tipo === "ativos" && !b.pago && venc >= hoje) {
+            mostrar = true;
+            statusClass = "status-ativo";
+            statusText = "À Vencer";
+          }
+          if (tipo === "vencidos" && !b.pago && venc < hoje) {
+            mostrar = true;
+            statusClass = "status-vencido";
+            statusText = "Vencido";
+          }
+          if (tipo === "pagos" && b.pago) {
+            mostrar = true;
+            statusClass = "status-pago";
+            statusText = "Pago";
+          }
+
+          if (mostrar) {
+            let multa = venc < hoje && !b.pago ? b.valor * 0.005 : 0;
+            let valorFinal = b.valor + multa;
+            container.innerHTML += `
+            <div class="boleto-card fade-in">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h4 style="margin: 0; color: var(--primary);">Boleto #${
+                  b.id
+                }</h4>
+                <span class="boleto-status ${statusClass}">${statusText}</span>
+              </div>
+              <p><strong>Valor:</strong> R$${valorFinal.toFixed(2)}</p>
+              ${
+                multa > 0
+                  ? `<p style="color: #dc2626;"><strong>Multa:</strong> R$${multa.toFixed(
+                      2
+                    )}</p>`
+                  : ""
+              }
+              <p><strong>Vencimento:</strong> ${new Date(
+                b.vencimento
+              ).toLocaleDateString("pt-BR")}</p>
+              ${
+                b.pago
+                  ? `<p><strong>Pago em:</strong> ${new Date(
+                      b.pagoEm
+                    ).toLocaleDateString(
+                      "pt-BR"
+                    )}</p><button onclick="mostrarComprovante(${
+                      b.id
+                    })">Ver Comprovante</button>`
+                  : `<button onclick="pagar(${b.id})" style="background: var(--gradient-accent);">Pagar Agora</button>`
+              }
+            </div>
+          `;
+          }
+        });
+
+        // Adiciona animação aos novos elementos
+        setTimeout(() => {
+          container.querySelectorAll(".boleto-card").forEach((card, index) => {
+            setTimeout(() => {
+              card.style.animation = `fadeInUp 0.6s ease-out ${
+                index * 0.1
+              }s both`;
+            }, 50);
+          });
+        }, 50);
+      }
+
+      function pagar(id) {
+        const boleto = boletos.find((b) => b.id === id);
+        let venc = new Date(boleto.vencimento);
+        let hoje = new Date();
+        let multa = venc < hoje ? boleto.valor * 0.005 : 0;
+        let valorFinal = boleto.valor + multa;
+
+        document.getElementById("detalhesPagamento").innerHTML = `
+        <div class="payment-details">
+          <h3 style="margin-bottom: 1rem; color: var(--primary);">Detalhes do Boleto</h3>
+          <p><strong>Valor Original:</strong> R$${boleto.valor.toFixed(2)}</p>
+          ${
+            multa > 0
+              ? `<p><strong>Multa:</strong> R$${multa.toFixed(2)}</p>`
+              : ""
+          }
+          <p><strong>Valor Total:</strong> R$${valorFinal.toFixed(2)}</p>
+          <p><strong>Vencimento:</strong> ${boleto.vencimento}</p>
+          
+          <div class="payment-methods">
+            <h4 style="margin-bottom: 1rem; color: var(--primary);">Selecione a forma de pagamento:</h4>
+            <label class="payment-method">
+              <input type="radio" name="pgto" value="pix"> 
+              PIX - Pagamento instantâneo
+            </label>
+            <label class="payment-method">
+              <input type="radio" name="pgto" value="cartao"> 
+              Cartão de Crédito
+            </label>
+            <label class="payment-method">
+              <input type="radio" name="pgto" value="boleto"> 
+              Gerar novo boleto
+            </label>
+          </div>
+        </div>
+      `;
+
+        boletoSelecionado = boleto;
+        goTo("pagamentoScreen");
+      }
+
+      let boletoSelecionado = null;
+
+      function confirmarPagamento() {
+        const metodoPagamento = document.querySelector(
+          'input[name="pgto"]:checked'
+        );
+        if (!metodoPagamento) {
+          alert("Por favor, selecione uma forma de pagamento!");
+          return;
+        }
+
+        let tipoString = "";
+        switch (metodoPagamento.value) {
+          case "pix":
+            tipoString = "PIX";
+            break;
+          case "cartao":
+            tipoString = "Cartão de Crédito";
+            break;
+          case "boleto":
+            tipoString = "Boleto Bancário";
+            break;
+          default:
+            tipoString = "PIX";
+        }
+
+        boletoSelecionado.pago = true;
+        boletoSelecionado.pagoEm = new Date().toISOString().split("T")[0];
+
+        let venc = new Date(boletoSelecionado.vencimento);
+        let hoje = new Date();
+        let multa = venc < hoje ? boletoSelecionado.valor * 0.005 : 0;
+        let valorFinal = boletoSelecionado.valor + multa;
+
+        document.getElementById("comprovanteDetalhes").innerHTML = `
+        <h3 style="margin-bottom: 1.5rem; color: var(--primary); text-align: center;">Pagamento Confirmado</h3>
+        <p><strong>ID:</strong> #${boletoSelecionado.id}</p>
+        <p><strong>Valor Pago:</strong> R$${valorFinal.toFixed(2)}</p>
+        <p><strong>Método:</strong> ${tipoString}</p>
+        <p><strong>Vencimento:</strong> ${boletoSelecionado.vencimento}</p>
+        <p><strong>Pago em:</strong> ${boletoSelecionado.pagoEm}</p>
+        <div style="text-align: center; margin-top: 1.5rem; padding: 1rem; background: rgba(34, 197, 94, 0.1); border-radius: 15px; border: 2px solid rgba(34, 197, 94, 0.3);">
+          <p style="color: #059669; font-weight: 600; margin: 0;">Pagamento processado com sucesso!</p>
+        </div>
+      `;
+
+        // Atualiza a interface para refletir o pagamento
+        atualizarInterfaceAposPagamento();
+
+        goTo("comprovanteScreen");
+      }
+
+      function mostrarComprovante(id) {
+        const b = boletos.find((x) => x.id === id);
+        document.getElementById("comprovanteDetalhes").innerHTML = `
+        <h3 style="margin-bottom: 1.5rem; color: var(--primary); text-align: center;">Comprovante de Pagamento</h3>
+        <p><strong>ID:</strong> #${b.id}</p>
+        <p><strong>Valor:</strong> R$${b.valor.toFixed(2)}</p>
+        <p><strong>Método:</strong> PIX</p>
+        <p><strong>Vencimento:</strong> ${b.vencimento}</p>
+        <p><strong>Pago em:</strong> ${b.pagoEm}</p>
+        <div style="text-align: center; margin-top: 1.5rem; padding: 1rem; background: rgba(34, 197, 94, 0.1); border-radius: 15px; border: 2px solid rgba(34, 197, 94, 0.3);">
+          <p style="color: #059669; font-weight: 600; margin: 0;">Pagamento confirmado</p>
+        </div>
+      `;
+        goTo("comprovanteScreen");
+      }
+
+      function showComingSoon() {
+        alert(
+          "Funcionalidade em desenvolvimento!\n\nEssa feature estará disponível em breve."
+        );
+      }
+
+      function logout() {
+        if (confirm("Tem certeza que deseja sair?")) {
+          // Limpa os dados armazenados
+          localStorage.removeItem("userMatricula");
+
+          // Limpa os campos de login
+          document.getElementById("matricula").value = "";
+          document.getElementById("senha").value = "";
+
+          showMessage("Logout realizado com sucesso!", "success");
+          setTimeout(() => {
+            goTo("loginScreen");
+          }, 1000);
+        }
+      }
+
+      function atualizarResumoFinanceiro() {
+        const hoje = new Date();
+        let totalAtivos = 0;
+        let totalVencidos = 0;
+        let totalPagos = 0;
+        let contAtivos = 0;
+        let contVencidos = 0;
+        let contPagos = 0;
+
+        boletos.forEach((b) => {
+          const venc = new Date(b.vencimento);
+          if (b.pago) {
+            totalPagos += b.valor;
+            contPagos++;
+          } else if (venc < hoje) {
+            const multa = b.valor * 0.005;
+            totalVencidos += b.valor + multa;
+            contVencidos++;
+          } else {
+            totalAtivos += b.valor;
+            contAtivos++;
+          }
+        });
+
+        document.getElementById("resumoFinanceiro").innerHTML = `
+          <div style="background: rgba(255, 193, 7, 0.1); padding: 1rem; border-radius: 10px; border: 1px solid #ffc107;">
+            <div style="font-size: 0.875rem; color: #856404; font-weight: 600;">À VENCER</div>
+            <div style="font-size: 1.25rem; font-weight: 700; color: #856404;">${contAtivos}</div>
+            <div style="font-size: 0.75rem; color: #856404;">R$ ${totalAtivos.toFixed(
+              2
+            )}</div>
+          </div>
+          <div style="background: rgba(220, 53, 69, 0.1); padding: 1rem; border-radius: 10px; border: 1px solid #dc3545;">
+            <div style="font-size: 0.875rem; color: #721c24; font-weight: 600;">VENCIDOS</div>
+            <div style="font-size: 1.25rem; font-weight: 700, color: #721c24;">${contVencidos}</div>
+            <div style="font-size: 0.75rem; color: #721c24;">R$ ${totalVencidos.toFixed(
+              2
+            )}</div>
+          </div>
+          <div style="background: rgba(25, 135, 84, 0.1); padding: 1rem; border-radius: 10px; border: 1px solid #198754;">
+            <div style="font-size: 0.875rem; color: #0f5132; font-weight: 600;">PAGOS</div>
+            <div style="font-size: 1.25rem; font-weight: 700; color: #0f5132;">${contPagos}</div>
+            <div style="font-size: 0.75rem; color: #0f5132;">R$ ${totalPagos.toFixed(
+              2
+            )}</div>
+          </div>
+        `;
+      }
+
+      function atualizarInterfaceAposPagamento() {
+        // Atualiza o resumo financeiro e os boletos na tela
+        atualizarResumoFinanceiro();
+
+        // Verifica qual aba estava ativa e recarrega
+        const activeTab = document.querySelector(".tabs button.active-tab");
+        if (activeTab) {
+          const tipoAtivo = activeTab.id.replace("tab-", "");
+          setTimeout(() => {
+            filterBoletos(tipoAtivo);
+          }, 100);
+        }
+      }
+
+      function atualizarInfoUsuario(matricula) {
+        // Base de dados simulada de alunos
+        const alunos = {
+          2024001: {
+            nome: "Lucas Andrade",
+            curso: "Engenharia de Computação",
+            iniciais: "LA",
+          },
+          2024002: {
+            nome: "Maria Silva",
+            curso: "Engenharia de Software",
+            iniciais: "MS",
+          },
+          2024003: {
+            nome: "João Santos",
+            curso: "Sistemas de Informação",
+            iniciais: "JS",
+          },
+          2023001: {
+            nome: "Ana Costa",
+            curso: "Engenharia Elétrica",
+            iniciais: "AC",
+          },
+          2023002: {
+            nome: "Pedro Lima",
+            curso: "Engenharia Mecânica",
+            iniciais: "PL",
+          },
+        };
+
+        // Busca as informações do aluno ou usa valores padrão
+        const dadosAluno = alunos[matricula] || {
+          nome: "Usuário",
+          curso: "Curso não identificado",
+          iniciais: "U",
+        };
+
+        // Atualiza as informações na tela inicial
+        document.getElementById(
+          "nomeUsuario"
+        ).textContent = `Bem-vindo, ${dadosAluno.nome}!`;
+        document.getElementById(
+          "matriculaUsuario"
+        ).textContent = `Matrícula: ${matricula}`;
+        document.getElementById("cursoUsuario").textContent = dadosAluno.curso;
+
+        // Atualiza as iniciais no avatar
+        const profilePic = document.querySelector(".profile-pic");
+        profilePic.textContent = dadosAluno.iniciais;
+      }
+
+      // Inicializa a aplicação
+      window.onload = function () {
+        // Verifica se há uma matrícula armazenada (usuário já logado)
+        const matriculaArmazenada = localStorage.getItem("userMatricula");
+        if (matriculaArmazenada) {
+          atualizarInfoUsuario(matriculaArmazenada);
+        }
+
+        filterBoletos("ativos");
+        // Inicializa a animação da tela inicial
+        setTimeout(() => {
+          document.querySelector(".screen.active").classList.add("fade-in");
+        }, 100);
+        atualizarResumoFinanceiro();
+      };
+    </script>
+  </body>
+</html>
